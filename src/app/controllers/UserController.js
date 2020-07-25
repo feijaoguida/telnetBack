@@ -1,4 +1,5 @@
 const connection = require("../database/connection");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   async index(req, res) {
@@ -15,10 +16,13 @@ module.exports = {
         .status(400)
         .json({ Error: "Senha não confere com a validação." });
     }
+
+    const passwordHash = await bcrypt.hash(password, 8);
+
     const [id] = await connection("user").insert({
       name,
       email,
-      password,
+      password: passwordHash,
     });
 
     return res.json({ id });
