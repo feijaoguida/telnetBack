@@ -2,27 +2,32 @@ const connection = require("../database/connection");
 
 class SimulacaoController {
   async index(req, res) {
-    const { IdPlans, period, origin, destiny } = req.body;
-
+    const { idPlans, period, idTariff } = req.body;
     const [plano] = await connection("plans")
       .where({
-        id: IdPlans,
+        id: idPlans,
       })
       .select("period");
 
+    if (!plano) {
+      return res.status(200).json({ Error: "Plano não Localizado." });
+    }
+
     const [price] = await connection("tariff")
       .where({
-        origin: origin,
-        destiny: destiny,
+        id: idTariff,
       })
-      .select("price");
+      .select("*");
+
+    if (!price) {
+      return res.status(200).json({ Error: "Valor da Tarifa não Localizado." });
+    }
 
     const tarifa = price.price;
+
     const periodPlans = plano.period;
 
     function calculateFaleMais(plans, period, tariff) {
-      console.log("Falemais " + plans);
-      console.log("tariff : " + tariff);
       if (plans > period) {
         return 0;
       } else {
@@ -39,8 +44,8 @@ class SimulacaoController {
     let semFaleMais = calculateSemFaleMais(period, tarifa);
 
     return res.json({
-      origin,
-      destiny,
+      origin: price.origin,
+      destiny: price.destiny,
       periodPlans,
       period,
       tarifa,

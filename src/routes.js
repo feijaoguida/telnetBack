@@ -16,7 +16,7 @@ routes.post("/session", SessionController.create);
 routes.get("/user", UserController.index);
 routes.post("/user", UserController.create);
 
-routes.use(authMiddleware);
+//routes.use(authMiddleware);
 
 routes.delete("/user/:id", UserController.delete);
 
@@ -26,9 +26,10 @@ routes.delete("/plans/:id", PlansController.delete);
 
 routes.get("/tariff", TariffController.index);
 routes.post("/tariff", TariffController.create);
+routes.delete("/tariff/:id", TariffController.delete);
 
 routes.get("/simulate", SimulateController.index);
 
-routes.get("/simulacao", SimulacaoController.index);
+routes.post("/simulacao", SimulacaoController.index);
 
 module.exports = routes;

@@ -18,4 +18,12 @@ module.exports = {
 
     return res.json({ id });
   },
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    await connection("tariff").where({ id: id }).del();
+
+    return res.json("O Registro " + id + " Excluido com sucesso").status(200);
+  },
 };

@@ -6,21 +6,23 @@ const authConfig = require("../config/auth");
 class SessionController {
   async create(req, res) {
     //email and password from body
-    const { email, passwordUser } = req.body;
+    const { email, password } = req.body;
     const [user] = await connection("user").where({ email: email }).select("*");
 
-    //this is password from db, hash
-    const { id, name, password } = user;
-
+    console.log("email + passworduser: " + email, password);
     if (!user) {
       return res.status(401).json({ error: "Usuário não encontrato" });
     }
 
-    function checkPassword(passwordUser) {
-      return bcrypt.compare(passwordUser, password);
+    //this is password from db, hash
+    const { id, name, password: passwordHash } = user;
+    console.log("User: " + id, name, passwordHash);
+
+    function checkPassword(password) {
+      return bcrypt.compare(password, passwordHash);
     }
 
-    if (!(await checkPassword(passwordUser))) {
+    if (!(await checkPassword(password))) {
       return res.status(401).json({ error: "Senha não confere" });
     }
 
