@@ -1,6 +1,5 @@
 const express = require("express");
 
-const SimulateController = require("./app/controllers/SimulateController");
 const SimulacaoController = require("./app/controllers/SimulacaoController");
 const UserController = require("./app/controllers/UserController");
 const PlansController = require("./app/controllers/PlansController");
@@ -27,8 +26,6 @@ routes.delete("/plans/:id", PlansController.delete);
 routes.get("/tariff", TariffController.index);
 routes.post("/tariff", TariffController.create);
 routes.delete("/tariff/:id", TariffController.delete);
-
-routes.get("/simulate", SimulateController.index);
 
 routes.post("/simulacao", SimulacaoController.index);
 
